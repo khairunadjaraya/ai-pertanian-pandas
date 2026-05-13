@@ -1,16 +1,16 @@
 import pandas as pd
 
 from script.data_loader import baca_data
-from script.data_analysis import hitung_total_produksi, filter_tahun, filter_kg
+from script.data_analysis import hitung_total_produksi, filter_tahun, filter_kg, cleaning_data
 from script.data_exporter import simpan_laporan
 
 def main():
     print("=== SISTEM ANALISIS PADI ===")
-    data = baca_data()
+    data_kotor = baca_data()
+    data = cleaning_data(data_kotor)
     hasil_panen = hitung_total_produksi(data)
 
-
-    print("Berikut adalah data-data produksi padi beberapa tahun terakhir:")
+    print("\nBerikut adalah data-data produksi padi beberapa tahun terakhir:")
     print(data)
 
     print("\nBerikut adalah total produksi panen pada setiap provinsi:")

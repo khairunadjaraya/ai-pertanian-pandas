@@ -1,21 +1,28 @@
 import pandas as pd
 
 from script.data_loader import baca_data
-from script.data_analysis import hitung_total_produksi, filter_tahun
+from script.data_analysis import hitung_total_produksi, filter_tahun, filter_kg
 from script.data_exporter import simpan_laporan
 
 def main():
-    print("=== ANALISIS PRODUKSI PADI ===")
+    print("=== SISTEM ANALISIS PADI ===")
     data = baca_data()
     hasil_panen = hitung_total_produksi(data)
+
 
     print("Berikut adalah data-data produksi padi beberapa tahun terakhir:")
     print(data)
 
     print("\nBerikut adalah total produksi panen pada setiap provinsi:")
     print(hasil_panen)
+    simpan_laporan(hasil_panen, "laporan_total")
 
-    simpan_laporan(hasil_panen)
+    target = int(input("\nTentukan range produksi padi yang diinginkan: "))
+    data_daerah = data[data["provinsi"]=="Jawa Barat"]
+    operator = input("Operator: ")
+    print(f"\nBerikut adalah data-data provinsi penghasil padi {operator} {target}: ")
+    data_filteran = filter_kg(data_daerah, operator, target)
+    print(data_filteran)
 
     pertanyaan = input("\nApakah tertarik untuk melihat data pada tahun tertentu? ")
     if pertanyaan == "ya":

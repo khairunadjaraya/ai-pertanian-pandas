@@ -1,6 +1,6 @@
 import pandas as pd
 
-def simpan_laporan(hasil_panen):
+def simpan_laporan(DataFrame, Nama_File):
     """Menyimpan laporan hasil perhitungan total produksi tiap kabupaten"""
-    hasil_panen.to_csv("output/laporan_padi.csv", index=False)
+    DataFrame.to_csv(f"output/{Nama_File}.csv", index=False)
     print("\nData telah berhasil disimpan!")

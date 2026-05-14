@@ -1,8 +1,8 @@
 import pandas as pd
 
-def hitung_total_produksi(data):
+def total_produksi(data, target):
     """Menghitung total produksi tiap provinsi"""
-    hasil_panen = data.groupby("provinsi")["produksi_kg"].sum().reset_index()
+    hasil_panen = data.groupby(f"{target}")["produksi_kg"].sum().reset_index()
     return hasil_panen
 
 def filter_tahun(data, tahun):
@@ -32,14 +32,3 @@ def filter_kg(data, operator, target):
         return None
 
     return hasil
-
-def cleaning_data (data):
-
-    for kolom in data.columns:
-        total_null = data[kolom].isnull().sum()
-        if total_null > 0:
-            print(f"Ada kekosongan data pada kolom {kolom}")
-            if pd.api.types.is_numeric_dtype(data[kolom]):
-                data[kolom] = data[kolom].fillna(data[kolom].mean())
-    print("Tenang saja, sudah diperbaiki!")
-    return data

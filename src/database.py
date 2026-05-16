@@ -1,6 +1,49 @@
 import pandas as pd
 import sqlite3 as sql
 
+# Membuat koneksi database
+def connect_db():
+    conn = sql.connect("pertanian.db")
+    return conn
+
+# Membuat object cursor
+conn = connect_db()
+cursor = conn.cursor()
+
+# Membuat tabel produksi_padi
+def save_to_db(df, name_file):
+    conn = connect_db()
+    df.to_sql(
+        name_file,
+        conn,
+        if_exists="replace",
+        index=False
+    )
+    conn.close()
+    print(f"Data berhasil disimpan ke tabel {name_file}!")
+
+def read_from_db(name_file):
+    conn = connect_db()
+    df = pd.read_sql(f"SELECT * FROM {name_file}", conn)
+    conn.close()
+    return df   
+
+def query_by_provinsi (provinsi):
+    conn = connect_db()
+    query = f"""SELECT * FROM produksi_padi
+    WHERE provinsi = '{provinsi}'"""
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return df
+
+def query_by_column(column, value):
+    conn = connect_db()
+    query = f"""SELECT * FROM produksi_padi
+    WHERE {column} = '{value}'"""
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return df
+
 data = {
     "provinsi": ["Jawa Barat", "Jawa Tengah", "Jawa Timur"],
     "tahun": [2024, 2024, 2024],
@@ -11,20 +54,6 @@ data = {
 df = pd.DataFrame(data)
 
 print(df)
-
-# Membuat koneksi database
-conn = sql.connect("pertanian.db")
-
-# Membuat object cursor
-cursor = conn.cursor()
-
-# Membuat tabel produksi_padi
-df.to_sql(
-    "produksi_padi",
-    conn,
-    if_exists="replace",
-    index=False
-)
 
 query = """SELECT provinsi, produksi_ton 
 FROM produksi_padi
